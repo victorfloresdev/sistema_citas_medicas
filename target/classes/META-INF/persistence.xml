@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
+             https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd"
+             version="3.1">
+
+    <!-- Unidad Principal: PostgreSQL -->
+    <persistence-unit name="medigestionPU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <class>com.medigestion.model.Especialidad</class>
+        <class>com.medigestion.model.Paciente</class>
+        <class>com.medigestion.model.Administrador</class>
+        <class>com.medigestion.model.Medico</class>
+        <class>com.medigestion.model.Horario</class>
+        <class>com.medigestion.model.OfertaMedica</class>
+        <class>com.medigestion.model.ReservaCita</class>
+        <class>com.medigestion.model.Notificacion</class>
+        <class>com.medigestion.model.SuscripcionAlerta</class>
+        <class>com.medigestion.model.DemandaNoAtendida</class>
+        <class>com.medigestion.model.AusenciaMedico</class>
+        <class>com.medigestion.model.BitacoraEvento</class>
+
+        <properties>
+            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/medigestion"/>
+            <property name="jakarta.persistence.jdbc.user" value="postgres"/>
+            <property name="jakarta.persistence.jdbc.password" value="admin123"/>
+
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.format_sql" value="false"/>
+            <property name="hibernate.connection.pool_size" value="5"/>
+        </properties>
+    </persistence-unit>
+
+    <!-- Unidad Fallback / Auto-evaluable: H2 en modo PostgreSQL -->
+    <persistence-unit name="medigestionH2PU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <class>com.medigestion.model.Especialidad</class>
+        <class>com.medigestion.model.Paciente</class>
+        <class>com.medigestion.model.Administrador</class>
+        <class>com.medigestion.model.Medico</class>
+        <class>com.medigestion.model.Horario</class>
+        <class>com.medigestion.model.OfertaMedica</class>
+        <class>com.medigestion.model.ReservaCita</class>
+        <class>com.medigestion.model.Notificacion</class>
+        <class>com.medigestion.model.SuscripcionAlerta</class>
+        <class>com.medigestion.model.DemandaNoAtendida</class>
+        <class>com.medigestion.model.AusenciaMedico</class>
+        <class>com.medigestion.model.BitacoraEvento</class>
+
+        <properties>
+            <property name="jakarta.persistence.jdbc.driver" value="org.h2.Driver"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:h2:mem:medigestion;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH"/>
+            <property name="jakarta.persistence.jdbc.user" value="sa"/>
+            <property name="jakarta.persistence.jdbc.password" value=""/>
+
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.format_sql" value="false"/>
+        </properties>
+    </persistence-unit>
+</persistence>
