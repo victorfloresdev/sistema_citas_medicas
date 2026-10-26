@@ -14,4 +14,5 @@ public interface IReservaCitaDAO extends IDAO<ReservaCita, Integer> {
     List<ReservaCita> findByPacienteDni(String dni);
     List<ReservaCita> findCitasActivasDelDia(LocalDateTime inicioDia, LocalDateTime finDia);
     long countCitasActivasSemanaPorEspecialidad(String dni, Integer idEspecialidad, LocalDateTime inicioSemana, LocalDateTime finSemana);
+    public List<ReservaCita> findAllConDetallesCompletos();
 }

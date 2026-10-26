@@ -22,7 +22,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
- * Servicio para generación y exportación de reportes institucionales en formato Excel (.xlsx)
+ * Servicio para generación y exportación de reportes institucionales en formato
+ * Excel (.xlsx)
  * utilizando Apache POI (REP-01, R01, R02, R03).
  * Cumple con la rúbrica de recursos Java y principios SOLID (SRP, DIP).
  */
@@ -44,19 +45,22 @@ public class ReporteService {
     }
 
     /**
-     * Genera el reporte oficial de citas médicas programadas e históricas en un archivo Excel .xlsx (REP-01).
+     * Genera el reporte oficial de citas médicas programadas e históricas en un
+     * archivo Excel .xlsx (REP-01).
      *
-     * @param rutaDestino Ruta donde se guardará el archivo Excel (ej: "reportes/Reporte_Citas_Medicas.xlsx").
+     * @param rutaDestino Ruta donde se guardará el archivo Excel (ej:
+     *                    "reportes/Reporte_Citas_Medicas.xlsx").
      * @return El archivo File generado y cerrado correctamente.
      * @throws IOException Si ocurre algún error en la escritura en disco.
      */
     public File exportarReporteCitasExcel(String rutaDestino) throws IOException {
-        List<ReservaCita> citas = reservaCitaDAO.findAll();
+        List<ReservaCita> citas = reservaCitaDAO.findAllConDetallesCompletos();
         return exportarReporteCitasExcel(citas, rutaDestino);
     }
 
     /**
-     * Sobrecarga desacoplada para exportar una lista específica de citas médicas (apoyo a TDD).
+     * Sobrecarga desacoplada para exportar una lista específica de citas médicas
+     * (apoyo a TDD).
      */
     public File exportarReporteCitasExcel(List<ReservaCita> citas, String rutaDestino) throws IOException {
         Preconditions.checkNotNull(citas, "La lista de citas no puede ser nula.");
@@ -139,24 +143,28 @@ public class ReporteService {
                 c3.setCellStyle(estiloTexto);
 
                 Cell c4 = row.createCell(4);
-                c4.setCellValue(c.getOfertaMedica() != null && c.getOfertaMedica().getEspecialidad() != null ?
-                        c.getOfertaMedica().getEspecialidad().getNombreEspecialidad() : "—");
+                c4.setCellValue(c.getOfertaMedica() != null && c.getOfertaMedica().getEspecialidad() != null
+                        ? c.getOfertaMedica().getEspecialidad().getNombreEspecialidad()
+                        : "—");
                 c4.setCellStyle(estiloTexto);
 
                 Cell c5 = row.createCell(5);
-                c5.setCellValue(c.getOfertaMedica() != null && c.getOfertaMedica().getMedico() != null ?
-                        c.getOfertaMedica().getMedico().getNombreCompleto() : "—");
+                c5.setCellValue(c.getOfertaMedica() != null && c.getOfertaMedica().getMedico() != null
+                        ? c.getOfertaMedica().getMedico().getNombreCompleto()
+                        : "—");
                 c5.setCellStyle(estiloTexto);
 
                 Cell c6 = row.createCell(6);
-                c6.setCellValue(c.getOfertaMedica() != null && c.getOfertaMedica().getMedico() != null ?
-                        c.getOfertaMedica().getMedico().getConsultorio() : "—");
+                c6.setCellValue(c.getOfertaMedica() != null && c.getOfertaMedica().getMedico() != null
+                        ? c.getOfertaMedica().getMedico().getConsultorio()
+                        : "—");
                 c6.setCellStyle(estiloCentrado);
 
                 Cell c7 = row.createCell(7);
                 String strFecha = (c.getOfertaMedica() != null && c.getOfertaMedica().getHorario() != null &&
-                        c.getOfertaMedica().getHorario().getFechaHoraInicio() != null) ?
-                        c.getOfertaMedica().getHorario().getFechaHoraInicio().format(FMT_FECHA_HORA) : "—";
+                        c.getOfertaMedica().getHorario().getFechaHoraInicio() != null)
+                                ? c.getOfertaMedica().getHorario().getFechaHoraInicio().format(FMT_FECHA_HORA)
+                                : "—";
                 c7.setCellValue(strFecha);
                 c7.setCellStyle(estiloCentrado);
 
@@ -194,7 +202,8 @@ public class ReporteService {
     }
 
     /**
-     * Genera el reporte de demanda insatisfecha y afluencia en Excel (RF-07, R02, R03).
+     * Genera el reporte de demanda insatisfecha y afluencia en Excel (RF-07, R02,
+     * R03).
      */
     public File exportarReporteDemandaExcel(int afluenciaActual, String rutaDestino) throws IOException {
         List<DemandaNoAtendida> demandas = demandaDAO.findAll();
@@ -202,7 +211,8 @@ public class ReporteService {
 
         File archivo = new File(rutaDestino);
         File dir = archivo.getParentFile();
-        if (dir != null && !dir.exists()) dir.mkdirs();
+        if (dir != null && !dir.exists())
+            dir.mkdirs();
 
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Demanda y Afluencia");
@@ -229,7 +239,7 @@ public class ReporteService {
 
             fila++; // espacio
 
-            String[] headers = {"ID", "DNI Paciente", "Nombre Paciente", "Especialidad Buscada", "Fecha Solicitud"};
+            String[] headers = { "ID", "DNI Paciente", "Nombre Paciente", "Especialidad Buscada", "Fecha Solicitud" };
             Row rCabecera = sheet.createRow(fila++);
             for (int i = 0; i < headers.length; i++) {
                 Cell c = rCabecera.createCell(i);

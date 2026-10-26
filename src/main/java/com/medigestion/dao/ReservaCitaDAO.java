@@ -19,12 +19,12 @@ public class ReservaCitaDAO extends GenericDAO<ReservaCita, Integer> implements 
         try {
             ReservaCita r = em.createQuery(
                     "SELECT r FROM ReservaCita r " +
-                    "JOIN FETCH r.paciente " +
-                    "JOIN FETCH r.ofertaMedica om " +
-                    "JOIN FETCH om.medico " +
-                    "JOIN FETCH om.horario " +
-                    "JOIN FETCH om.especialidad " +
-                    "WHERE r.idReserva = :id",
+                            "JOIN FETCH r.paciente " +
+                            "JOIN FETCH r.ofertaMedica om " +
+                            "JOIN FETCH om.medico " +
+                            "JOIN FETCH om.horario " +
+                            "JOIN FETCH om.especialidad " +
+                            "WHERE r.idReserva = :id",
                     ReservaCita.class)
                     .setParameter("id", id)
                     .getSingleResult();
@@ -41,12 +41,12 @@ public class ReservaCitaDAO extends GenericDAO<ReservaCita, Integer> implements 
         try {
             ReservaCita r = em.createQuery(
                     "SELECT r FROM ReservaCita r " +
-                    "JOIN FETCH r.paciente " +
-                    "JOIN FETCH r.ofertaMedica om " +
-                    "JOIN FETCH om.medico " +
-                    "JOIN FETCH om.horario " +
-                    "JOIN FETCH om.especialidad " +
-                    "WHERE r.codigoTicket = :codigo",
+                            "JOIN FETCH r.paciente " +
+                            "JOIN FETCH r.ofertaMedica om " +
+                            "JOIN FETCH om.medico " +
+                            "JOIN FETCH om.horario " +
+                            "JOIN FETCH om.especialidad " +
+                            "WHERE r.codigoTicket = :codigo",
                     ReservaCita.class)
                     .setParameter("codigo", codigo)
                     .getSingleResult();
@@ -63,12 +63,12 @@ public class ReservaCitaDAO extends GenericDAO<ReservaCita, Integer> implements 
         try {
             return em.createQuery(
                     "SELECT r FROM ReservaCita r " +
-                    "JOIN FETCH r.ofertaMedica om " +
-                    "JOIN FETCH om.medico " +
-                    "JOIN FETCH om.horario " +
-                    "JOIN FETCH om.especialidad " +
-                    "WHERE r.paciente.dni = :dni " +
-                    "ORDER BY om.horario.fechaHoraInicio DESC",
+                            "JOIN FETCH r.ofertaMedica om " +
+                            "JOIN FETCH om.medico " +
+                            "JOIN FETCH om.horario " +
+                            "JOIN FETCH om.especialidad " +
+                            "WHERE r.paciente.dni = :dni " +
+                            "ORDER BY om.horario.fechaHoraInicio DESC",
                     ReservaCita.class)
                     .setParameter("dni", dni)
                     .getResultList();
@@ -82,14 +82,14 @@ public class ReservaCitaDAO extends GenericDAO<ReservaCita, Integer> implements 
         try {
             return em.createQuery(
                     "SELECT r FROM ReservaCita r " +
-                    "JOIN FETCH r.paciente " +
-                    "JOIN FETCH r.ofertaMedica om " +
-                    "JOIN FETCH om.medico " +
-                    "JOIN FETCH om.horario h " +
-                    "JOIN FETCH om.especialidad " +
-                    "WHERE h.fechaHoraInicio >= :inicio AND h.fechaHoraInicio <= :fin " +
-                    "AND r.estado IN ('Pendiente', 'Confirmada') " +
-                    "ORDER BY h.fechaHoraInicio ASC",
+                            "JOIN FETCH r.paciente " +
+                            "JOIN FETCH r.ofertaMedica om " +
+                            "JOIN FETCH om.medico " +
+                            "JOIN FETCH om.horario h " +
+                            "JOIN FETCH om.especialidad " +
+                            "WHERE h.fechaHoraInicio >= :inicio AND h.fechaHoraInicio <= :fin " +
+                            "AND r.estado IN ('Pendiente', 'Confirmada') " +
+                            "ORDER BY h.fechaHoraInicio ASC",
                     ReservaCita.class)
                     .setParameter("inicio", inicioDia)
                     .setParameter("fin", finDia)
@@ -99,22 +99,41 @@ public class ReservaCitaDAO extends GenericDAO<ReservaCita, Integer> implements 
         }
     }
 
-    public long countCitasActivasSemanaPorEspecialidad(String dni, Integer idEspecialidad, LocalDateTime inicioSemana, LocalDateTime finSemana) {
+    public long countCitasActivasSemanaPorEspecialidad(String dni, Integer idEspecialidad, LocalDateTime inicioSemana,
+            LocalDateTime finSemana) {
         EntityManager em = HibernateUtil.getEntityManager();
         try {
             return em.createQuery(
                     "SELECT COUNT(r) FROM ReservaCita r " +
-                    "WHERE r.paciente.dni = :dni " +
-                    "AND r.ofertaMedica.especialidad.idEspecialidad = :espId " +
-                    "AND r.ofertaMedica.horario.fechaHoraInicio >= :inicio " +
-                    "AND r.ofertaMedica.horario.fechaHoraInicio <= :fin " +
-                    "AND r.estado NOT IN ('Cancelada', 'Reprogramada')",
+                            "WHERE r.paciente.dni = :dni " +
+                            "AND r.ofertaMedica.especialidad.idEspecialidad = :espId " +
+                            "AND r.ofertaMedica.horario.fechaHoraInicio >= :inicio " +
+                            "AND r.ofertaMedica.horario.fechaHoraInicio <= :fin " +
+                            "AND r.estado NOT IN ('Cancelada', 'Reprogramada')",
                     Long.class)
                     .setParameter("dni", dni)
                     .setParameter("espId", idEspecialidad)
                     .setParameter("inicio", inicioSemana)
                     .setParameter("fin", finSemana)
                     .getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<ReservaCita> findAllConDetallesCompletos() {
+        EntityManager em = HibernateUtil.getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT r FROM ReservaCita r " +
+                            "JOIN FETCH r.paciente " +
+                            "JOIN FETCH r.ofertaMedica om " +
+                            "JOIN FETCH om.medico " +
+                            "JOIN FETCH om.horario " +
+                            "JOIN FETCH om.especialidad " +
+                            "ORDER BY om.horario.fechaHoraInicio DESC",
+                    ReservaCita.class)
+                    .getResultList();
         } finally {
             em.close();
         }
