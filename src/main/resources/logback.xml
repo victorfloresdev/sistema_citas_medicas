@@ -1,16 +1,33 @@
 <configuration>
+    <!-- Appender para consola -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <!-- Silenciar logs muy verbosos de Hibernate en consola para UI limpia -->
+    <!-- Appender para archivo persistente de auditoría y evidencias (logs/medigestion.log) -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>logs/medigestion.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Silenciar logs muy verbosos de Hibernate en consola para mantener UI limpia -->
     <logger name="org.hibernate" level="WARN"/>
     <logger name="org.hibernate.SQL" level="WARN"/>
-    <logger name="com.medigestion" level="INFO"/>
+    <logger name="org.hibernate.orm.jdbc.bind" level="WARN"/>
+
+    <!-- Trazabilidad del sistema MediGestión en nivel INFO -->
+    <logger name="com.medigestion" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </logger>
 
     <root level="WARN">
         <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
     </root>
 </configuration>

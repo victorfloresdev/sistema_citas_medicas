@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public class ReservaCitaDAO extends GenericDAO<ReservaCita, Integer> {
+public class ReservaCitaDAO extends GenericDAO<ReservaCita, Integer> implements IReservaCitaDAO {
 
     public ReservaCitaDAO() {
         super(ReservaCita.class);

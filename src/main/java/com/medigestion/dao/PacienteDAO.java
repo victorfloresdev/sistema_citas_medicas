@@ -6,7 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import java.util.Optional;
 
-public class PacienteDAO extends GenericDAO<Paciente, String> {
+public class PacienteDAO extends GenericDAO<Paciente, String> implements IPacienteDAO {
 
     public PacienteDAO() {
         super(Paciente.class);

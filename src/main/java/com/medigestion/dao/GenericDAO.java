@@ -9,7 +9,7 @@ import java.util.Optional;
 /**
  * DAO genérico base para operaciones CRUD con Hibernate/JPA.
  */
-public abstract class GenericDAO<T, ID> {
+public abstract class GenericDAO<T, ID> implements IDAO<T, ID> {
 
     private final Class<T> entityClass;
 

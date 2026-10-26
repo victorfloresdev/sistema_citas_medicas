@@ -1,0 +1,28 @@
+# Compilación Maven y artefactos
+target/
+*.class
+
+# Logs generados
+logs/
+*.log
+
+# Reportes generados en tiempo de ejecución
+reportes/
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# Sistema operativo
+Thumbs.db
+.DS_Store
+
+# Scripts temporales de mantenimiento
+inspect_*.py
+deep_inspect_*.py
+update_*.py
+fill_*.py

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public class OfertaMedicaDAO extends GenericDAO<OfertaMedica, Integer> {
+public class OfertaMedicaDAO extends GenericDAO<OfertaMedica, Integer> implements IOfertaMedicaDAO {
 
     public OfertaMedicaDAO() {
         super(OfertaMedica.class);
