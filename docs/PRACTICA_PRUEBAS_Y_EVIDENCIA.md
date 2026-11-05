@@ -2,6 +2,7 @@
 ## Sistema MediGestión - Gestión Integral de Citas Médicas
 **Curso:** Curso Integrador I: Sistemas - Software (UTP)  
 **Rama de Trabajo:** `test/practica-pruebas-evidencia`  
+**Commit de Referencia:** `b57b8b5` / `36e8a7a`  
 **Fecha de Ejecución:** 05 de Noviembre de 2026  
 **Entorno de Ejecución:** Windows 11, Oracle JDK 25 LTS, Apache Maven 3.9.6, JUnit 5.10.2, Mockito 5.11.0, AssertJ 3.25.3  
 
