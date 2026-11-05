@@ -20,6 +20,8 @@ reportes/
 # Sistema operativo
 Thumbs.db
 .DS_Store
+desktop.ini
+**/desktop.ini
 
 # Scripts temporales de mantenimiento
 inspect_*.py
