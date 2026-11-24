@@ -7,12 +7,15 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Clase principal de inicio de la aplicación web Spring Boot 3 - MediGestión.
  * Hito 80%: Despliegue en AWS y soporte multi-rol (Paciente, Médico, Administrador).
+ * Incorpora @EnableScheduling para tareas cron automatizadas (Rúbrica: Mantenimiento).
  */
 @SpringBootApplication
+@EnableScheduling
 public class MediGestionApplication {
 
     private static final Logger log = LoggerFactory.getLogger(MediGestionApplication.class);
