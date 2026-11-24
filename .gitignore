@@ -28,3 +28,8 @@ inspect_*.py
 deep_inspect_*.py
 update_*.py
 fill_*.py
+
+# Documentación personal del equipo y scripts generadores
+docs/
+scratch/
+generar_informe_docx.py
