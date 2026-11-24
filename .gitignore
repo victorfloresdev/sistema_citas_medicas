@@ -1,7 +1,7 @@
 # Compilación Maven y artefactos
 target/
 *.class
-
+ 
 # Logs generados
 logs/
 *.log
