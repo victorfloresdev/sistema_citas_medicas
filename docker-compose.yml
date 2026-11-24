@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # Base de Datos Relacional PostgreSQL (Producción / AWS)
+  medigestion-db:
+    image: postgres:16-alpine
+    container_name: medigestion-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_NAME:-medigestion_db}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-admin123}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - medigestion-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Aplicación Web Spring Boot 3 + Thymeleaf (Hito 80%)
+  medigestion-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: medigestion-web
+    restart: always
+    depends_on:
+      medigestion-db:
+        condition: service_healthy
+    ports:
+      - "80:8080"
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: aws
+      DB_HOST: medigestion-db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-medigestion_db}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-admin123}
+    networks:
+      - medigestion-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  medigestion-network:
+    driver: bridge

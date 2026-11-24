@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: header-head('Registro de Asegurado')}"></head>
+<body class="bg-light">
+
+<header th:replace="~{fragments/layout :: header-nav}"></header>
+
+<main class="container py-4 my-auto">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card card-custom p-4 p-md-5">
+                <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+                    <div class="bg-primary text-white rounded p-3 me-3">
+                        <i class="bi bi-person-plus-fill fs-3"></i>
+                    </div>
+                    <div>
+                        <h4 class="fw-bold mb-0 text-dark">Registro Ágil de Asegurado</h4>
+                        <small class="text-muted">Complete sus datos oficiales para activar su portal digital de citas</small>
+                    </div>
+                </div>
+
+                <div th:replace="~{fragments/layout :: alerts}"></div>
+
+                <form th:action="@{/registro}" method="post">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="dni" class="form-label fw-semibold small text-secondary">DNI (8 DÍGITOS)</label>
+                            <input type="text" class="form-control" id="dni" name="dni" maxlength="8" pattern="[0-9]{8}" placeholder="45892134" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="nombres" class="form-label fw-semibold small text-secondary">NOMBRES</label>
+                            <input type="text" class="form-control" id="nombres" name="nombres" placeholder="Ej. Carlos Alberto" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="apellidos" class="form-label fw-semibold small text-secondary">APELLIDOS</label>
+                            <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="Ej. Mendoza Rivera" required>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="edad" class="form-label fw-semibold small text-secondary">EDAD</label>
+                            <input type="number" class="form-control" id="edad" name="edad" min="1" max="120" placeholder="35" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="sexo" class="form-label fw-semibold small text-secondary">SEXO</label>
+                            <select class="form-select" id="sexo" name="sexo" required>
+                                <option value="HOMBRE">Hombre</option>
+                                <option value="MUJER">Mujer</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="telefono" class="form-label fw-semibold small text-secondary">TELÉFONO CELULAR</label>
+                            <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="987654321" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="email" class="form-label fw-semibold small text-secondary">CORREO ELECTRÓNICO</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="paciente@correo.com" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="contrasena" class="form-label fw-semibold small text-secondary">CONTRASEÑA SEGURA</label>
+                            <input type="password" class="form-control" id="contrasena" name="contrasena" placeholder="Mínimo 6 caracteres" required>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="direccion" class="form-label fw-semibold small text-secondary">DIRECCIÓN DOMICILIARIA</label>
+                            <input type="text" class="form-control" id="direccion" name="direccion" placeholder="Av. Principal 123, Distrito" required>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                        <a th:href="@{/login}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-1"></i> Volver al Inicio
+                        </a>
+                        <button type="submit" class="btn btn-primary px-4 fw-semibold shadow-sm">
+                            <i class="bi bi-check2-circle me-1"></i> Confirmar Registro
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+<configuration scan="true" scanPeriod="30 seconds">
+    <!-- Appender de Consola -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{36}) [%X{traceId:-SYS}] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Appender Rotativo Diario y por Tamaño con Compresión GZIP (Hito 80% - Monitoreo) -->
+    <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/medigestion.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- Nombre de archivo rotado con compresión .gz -->
+            <fileNamePattern>logs/archived/medigestion-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <!-- Tamaño máximo por archivo individual: 10MB -->
+            <maxFileSize>10MB</maxFileSize>
+            <!-- Retención histórica: 30 días -->
+            <maxHistory>30</maxHistory>
+            <!-- Límite total de almacenamiento en disco: 1GB -->
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} [traceId=%X{traceId:-SYSTEM}] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Loggers Específicos -->
+    <logger name="org.springframework.web" level="INFO"/>
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="org.hibernate.SQL" level="WARN"/>
+    <logger name="com.medigestion" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="ROLLING_FILE"/>
+    </logger>
+
+    <!-- Nivel Raíz -->
+    <root level="WARN">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="ROLLING_FILE"/>
+    </root>
+</configuration>

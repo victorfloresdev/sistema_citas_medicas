@@ -4,10 +4,12 @@ import com.medigestion.model.OfertaMedica;
 import com.medigestion.util.HibernateUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
+import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class OfertaMedicaDAO extends GenericDAO<OfertaMedica, Integer> implements IOfertaMedicaDAO {
 
     public OfertaMedicaDAO() {

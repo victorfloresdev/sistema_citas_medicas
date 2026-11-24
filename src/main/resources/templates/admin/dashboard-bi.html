@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: header-head('Dashboard y Analítica')}"></head>
+<body>
+
+<header th:replace="~{fragments/layout :: header-nav}"></header>
+
+<main class="container my-4">
+    <!-- Header Admin -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 pb-3 border-bottom gap-3">
+        <div>
+            <span class="badge bg-danger mb-1">Módulo Directivo y Control (BPM-4 / Hito 80%)</span>
+            <h3 class="fw-bold text-dark mb-0"><i class="bi bi-speedometer2 text-primary me-2"></i> Panel de Control y Analítica Hospitalaria</h3>
+            <small class="text-muted">Métricas en tiempo real, gestión de agendas y reportería ejecutiva oficial en Excel nativo (.xlsx)</small>
+        </div>
+        <div class="d-flex gap-2">
+            <!-- Botones Apache POI -->
+            <a th:href="@{/admin/reporte-citas/excel}" class="btn btn-success btn-sm px-3 shadow-sm">
+                <i class="bi bi-file-earmark-excel me-1"></i> Exportar Citas (.xlsx)
+            </a>
+            <a th:href="@{/admin/reporte-demanda/excel}" class="btn btn-outline-success btn-sm px-3">
+                <i class="bi bi-download me-1"></i> Exportar Demanda (.xlsx)
+            </a>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/layout :: alerts}"></div>
+
+    <!-- KPI Cards (Business Intelligence) -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card card-custom p-3 border-start border-primary border-4">
+                <div class="text-muted small fw-semibold text-uppercase">Citas Activas Hoy</div>
+                <div class="fs-2 fw-bold text-primary" th:text="${metricas.citasHoy}">5</div>
+                <small class="text-success"><i class="bi bi-arrow-up-short"></i> Citas agendadas</small>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card card-custom p-3 border-start border-success border-4">
+                <div class="text-muted small fw-semibold text-uppercase">Cupos Reservados</div>
+                <div class="fs-2 fw-bold text-success" th:text="${metricas.citasCompletadas}">3</div>
+                <small class="text-muted">En cartelera general</small>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card card-custom p-3 border-start border-info border-4">
+                <div class="text-muted small fw-semibold text-uppercase">Médicos Habilitados</div>
+                <div class="fs-2 fw-bold text-info" th:text="${metricas.totalMedicos}">5</div>
+                <small class="text-muted">Especialistas activos</small>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card card-custom p-3 border-start border-warning border-4">
+                <div class="text-muted small fw-semibold text-uppercase">Especialidades Red</div>
+                <div class="fs-2 fw-bold text-warning" th:text="${metricas.totalEspecialidades}">5</div>
+                <small class="text-muted">Servicios clínicos</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gestión Global de Ofertas y Agendas (BPM-4) -->
+    <div class="card card-custom p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+            <h5 class="fw-bold mb-0 text-dark">
+                <i class="bi bi-calendar4-range text-primary me-2"></i> Programación Centralizada de Ofertas Médicas
+            </h5>
+            <span class="badge bg-secondary-subtle text-secondary" th:text="${ofertas.size()} + ' horarios registrados'">10 horarios</span>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 small">
+                <thead class="table-light text-secondary text-uppercase">
+                    <tr>
+                        <th>ID Oferta</th>
+                        <th>Especialidad</th>
+                        <th>Médico</th>
+                        <th>Consultorio</th>
+                        <th>Fecha y Hora</th>
+                        <th>Estado de Cupo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="o : ${ofertas}">
+                        <td class="font-monospace fw-bold" th:text="'#OF-' + ${o.idOferta}">#OF-501</td>
+                        <td><strong th:text="${o.especialidad.nombreEspecialidad}">Cardiología</strong></td>
+                        <td th:text="${o.medico.nombreCompleto}">Dra. Sarah Jenkins</td>
+                        <td><span class="badge bg-light text-dark border" th:text="${o.consultorio}">C-101</span></td>
+                        <td th:text="${#temporals.format(o.horario.fechaHoraInicio, 'dd/MM/yyyy HH:mm')}">15/11/2026 10:00</td>
+                        <td>
+                            <span th:if="${o.estado == 'Disponible'}" class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">Disponible</span>
+                            <span th:if="${o.estado == 'Reservado'}" class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2 py-1">Reservado</span>
+                            <span th:if="${o.estado == 'Bloqueado'}" class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1">Bloqueado</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+</html>

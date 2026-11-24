@@ -8,17 +8,38 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 /**
  * Servicio para gestión administrativa y panel de control (BPMN-4, RF-11, RF-12, RF-14).
  */
+@Service
 public class AdminService {
 
-    private final AdministradorDAO adminDAO = new AdministradorDAO();
-    private final OfertaMedicaDAO ofertaMedicaDAO = new OfertaMedicaDAO();
-    private final ReservaCitaDAO reservaCitaDAO = new ReservaCitaDAO();
-    private final EspecialidadDAO especialidadDAO = new EspecialidadDAO();
-    private final MedicoDAO medicoDAO = new MedicoDAO();
-    private final BitacoraEventoDAO bitacoraDAO = new BitacoraEventoDAO();
+    private final AdministradorDAO adminDAO;
+    private final OfertaMedicaDAO ofertaMedicaDAO;
+    private final ReservaCitaDAO reservaCitaDAO;
+    private final EspecialidadDAO especialidadDAO;
+    private final MedicoDAO medicoDAO;
+    private final BitacoraEventoDAO bitacoraDAO;
+
+    public AdminService() {
+        this(new AdministradorDAO(), new OfertaMedicaDAO(), new ReservaCitaDAO(),
+             new EspecialidadDAO(), new MedicoDAO(), new BitacoraEventoDAO());
+    }
+
+    @Autowired
+    public AdminService(AdministradorDAO adminDAO, OfertaMedicaDAO ofertaMedicaDAO,
+                        ReservaCitaDAO reservaCitaDAO, EspecialidadDAO especialidadDAO,
+                        MedicoDAO medicoDAO, BitacoraEventoDAO bitacoraDAO) {
+        this.adminDAO = adminDAO;
+        this.ofertaMedicaDAO = ofertaMedicaDAO;
+        this.reservaCitaDAO = reservaCitaDAO;
+        this.especialidadDAO = especialidadDAO;
+        this.medicoDAO = medicoDAO;
+        this.bitacoraDAO = bitacoraDAO;
+    }
 
     public Optional<Administrador> loginAdmin(String email) {
         return adminDAO.findByEmail(email);

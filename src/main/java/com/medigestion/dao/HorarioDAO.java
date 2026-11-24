@@ -3,9 +3,11 @@ package com.medigestion.dao;
 import com.medigestion.model.Horario;
 import com.medigestion.util.HibernateUtil;
 import jakarta.persistence.EntityManager;
+import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Repository
 public class HorarioDAO extends GenericDAO<Horario, Integer> {
 
     public HorarioDAO() {

@@ -4,10 +4,12 @@ import com.medigestion.model.ReservaCita;
 import com.medigestion.util.HibernateUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
+import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class ReservaCitaDAO extends GenericDAO<ReservaCita, Integer> implements IReservaCitaDAO {
 
     public ReservaCitaDAO() {
@@ -71,6 +73,54 @@ public class ReservaCitaDAO extends GenericDAO<ReservaCita, Integer> implements 
                             "ORDER BY om.horario.fechaHoraInicio DESC",
                     ReservaCita.class)
                     .setParameter("dni", dni)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<ReservaCita> findByPacienteDniConDetalles(String dni) {
+        return findByPacienteDni(dni);
+    }
+
+    public List<ReservaCita> findCitasDelDiaPorMedico(Integer idMedico, LocalDateTime inicio, LocalDateTime fin) {
+        EntityManager em = HibernateUtil.getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT r FROM ReservaCita r " +
+                            "JOIN FETCH r.paciente " +
+                            "JOIN FETCH r.ofertaMedica om " +
+                            "JOIN FETCH om.medico m " +
+                            "JOIN FETCH om.horario h " +
+                            "JOIN FETCH om.especialidad " +
+                            "WHERE m.idMedico = :idMedico AND h.fechaHoraInicio >= :inicio AND h.fechaHoraInicio <= :fin " +
+                            "ORDER BY h.fechaHoraInicio ASC",
+                    ReservaCita.class)
+                    .setParameter("idMedico", idMedico)
+                    .setParameter("inicio", inicio)
+                    .setParameter("fin", fin)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<ReservaCita> findUltimasCitasLlamadas(LocalDateTime inicio, LocalDateTime fin) {
+        EntityManager em = HibernateUtil.getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT r FROM ReservaCita r " +
+                            "JOIN FETCH r.paciente " +
+                            "JOIN FETCH r.ofertaMedica om " +
+                            "JOIN FETCH om.medico " +
+                            "JOIN FETCH om.horario h " +
+                            "JOIN FETCH om.especialidad " +
+                            "WHERE r.estado = 'Confirmada' AND r.fechaLlamado IS NOT NULL " +
+                            "AND h.fechaHoraInicio >= :inicio AND h.fechaHoraInicio <= :fin " +
+                            "ORDER BY r.fechaLlamado DESC",
+                    ReservaCita.class)
+                    .setParameter("inicio", inicio)
+                    .setParameter("fin", fin)
                     .getResultList();
         } finally {
             em.close();

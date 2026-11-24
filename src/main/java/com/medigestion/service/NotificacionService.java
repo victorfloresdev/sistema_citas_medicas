@@ -8,10 +8,13 @@ import com.medigestion.model.BitacoraEvento;
 
 import java.time.LocalDateTime;
 
+import org.springframework.stereotype.Service;
+
 /**
  * Servicio de mensajería y notificaciones (Telegram / Email)
  * Cumple con RF-08, RF-10 y tolerancia a fallos RNF-03.
  */
+@Service
 public class NotificacionService {
 
     private final NotificacionDAO notificacionDAO = new NotificacionDAO();

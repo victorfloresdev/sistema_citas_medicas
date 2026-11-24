@@ -4,8 +4,10 @@ import com.medigestion.model.Paciente;
 import com.medigestion.util.HibernateUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
+import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
+@Repository
 public class PacienteDAO extends GenericDAO<Paciente, String> implements IPacienteDAO {
 
     public PacienteDAO() {

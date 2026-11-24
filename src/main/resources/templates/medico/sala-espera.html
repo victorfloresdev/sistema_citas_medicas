@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Auto-refresco cada 5 segundos para actualización en vivo en pantalla TV -->
+    <meta http-equiv="refresh" content="5">
+    <title>Monitor TV - Sala de Espera Hospitalaria</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0b1a2b;
+            color: #ffffff;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .header-bar {
+            background: linear-gradient(90deg, #091422 0%, #112d4e 100%);
+            border-bottom: 2px solid #00ADB5;
+        }
+        .ticket-hero {
+            background: radial-gradient(circle at center, #162436 0%, #0c1524 100%);
+            border: 3px solid #00ADB5;
+            box-shadow: 0 0 35px rgba(0, 173, 181, 0.3);
+            border-radius: 20px;
+        }
+        .ticket-code {
+            font-size: 5rem;
+            letter-spacing: 4px;
+            font-weight: 900;
+            color: #00ADB5;
+            text-shadow: 0 0 20px rgba(0, 173, 181, 0.6);
+        }
+        .consultorio-badge {
+            font-size: 3rem;
+            font-weight: 800;
+            background-color: #ff9800;
+            color: #000000;
+            border-radius: 12px;
+            padding: 0.2rem 1.5rem;
+            display: inline-block;
+        }
+        .history-card {
+            background-color: #112233;
+            border: 1px solid #1f3750;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body class="p-3 p-md-4">
+
+<!-- Top Header TV -->
+<header class="header-bar p-3 rounded-4 mb-4 d-flex justify-content-between align-items-center shadow">
+    <div class="d-flex align-items-center">
+        <div class="bg-primary text-white rounded-circle p-2 me-3 fs-3 d-flex align-items-center justify-content-center" style="width: 55px; height: 55px;">
+            <i class="bi bi-hospital"></i>
+        </div>
+        <div>
+            <h2 class="fw-bold mb-0 text-white">SALA DE ESPERA · ATENCIÓN MÉDICA</h2>
+            <small class="text-info">MINISTERIO DE SALUD · RED ASISTENCIAL MEDIGESTIÓN</small>
+        </div>
+    </div>
+    <div class="text-end">
+        <div class="badge bg-success px-3 py-2 fs-6 mb-1"><i class="bi bi-broadcast me-1"></i> MONITOR EN VIVO</div>
+        <div class="small text-white-50">Actualización automática cada 5s</div>
+    </div>
+</header>
+
+<main class="container-fluid flex-grow-1">
+    <div class="row g-4 align-items-stretch">
+        <!-- Turno Llamado Actual (Hero) -->
+        <div class="col-lg-8">
+            <div class="ticket-hero p-5 text-center h-100 d-flex flex-column justify-content-center">
+                <div th:if="${turnoActual != null}">
+                    <span class="badge bg-danger fs-5 px-4 py-2 mb-3 text-uppercase animate-pulse">
+                        <i class="bi bi-bell-fill me-2"></i> ¡ATENCIÓN AL LLAMADO!
+                    </span>
+
+                    <div class="text-white-50 text-uppercase tracking-widest fs-5 mb-2">TICKET ASIGNADO</div>
+                    <div class="ticket-code mb-3" th:text="${turnoActual.codigoTicket}">MG-XXXX-YY</div>
+
+                    <div class="my-4">
+                        <span class="text-white-50 fs-4 d-block mb-2">DIRÍJASE AL CONSULTORIO</span>
+                        <div class="consultorio-badge shadow" th:text="${turnoActual.ofertaMedica.consultorio}">C-101</div>
+                    </div>
+
+                    <div class="row justify-content-center mt-4">
+                        <div class="col-md-5">
+                            <div class="text-white-50 small">PACIENTE:</div>
+                            <div class="fs-4 fw-bold text-white" th:text="${turnoActual.paciente.nombreCompleto}">Carlos Mendoza Rivera</div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="text-white-50 small">MÉDICO / ESPECIALIDAD:</div>
+                            <div class="fs-4 fw-bold text-info" th:text="${turnoActual.ofertaMedica.medico.nombreCompleto} + ' (' + ${turnoActual.ofertaMedica.especialidad.nombreEspecialidad} + ')'">Dra. Sarah Jenkins</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${turnoActual == null}" class="py-5">
+                    <i class="bi bi-clock-history fs-1 text-white-50 mb-3 d-block"></i>
+                    <h2 class="fw-bold text-white">SALA EN ESPERA DE NUEVOS LLAMADOS</h2>
+                    <p class="text-white-50 fs-5">Los llamados a consultorio realizados por los especialistas se proyectarán inmediatamente en este monitor.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Historial de Últimos Llamados -->
+        <div class="col-lg-4">
+            <div class="history-card p-4 h-100">
+                <h4 class="fw-bold text-info mb-4 border-bottom border-secondary pb-2">
+                    <i class="bi bi-clock-history me-2"></i> ÚLTIMOS LLAMADOS
+                </h4>
+
+                <div th:if="${#lists.isEmpty(historialLlamados)}" class="text-white-50 text-center py-4 small">
+                    Sin llamados anteriores registrados hoy.
+                </div>
+
+                <div class="d-flex flex-column gap-3" th:if="${!#lists.isEmpty(historialLlamados)}">
+                    <div th:each="h : ${historialLlamados}" class="bg-dark p-3 rounded-3 border border-secondary d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="fw-bold text-warning fs-5 font-monospace d-block" th:text="${h.codigoTicket}">MG-TEST-01</span>
+                            <small class="text-white-50" th:text="${h.paciente.nombreCompleto}">Paciente Demo</small>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-secondary fs-6 px-3 py-2" th:text="${h.ofertaMedica.consultorio}">C-101</span>
+                            <div class="text-white-50 small mt-1" th:text="${#temporals.format(h.fechaLlamado, 'HH:mm')}">10:05</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="mt-4 text-center text-white-50 small">
+    MediGestión · Sistema de Salud Pública | Avance 80% (BPM-3 Estación de Consultorio y Sala de Espera)
+</footer>
+
+</body>
+</html>

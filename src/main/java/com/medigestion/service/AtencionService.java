@@ -7,13 +7,27 @@ import com.medigestion.model.BitacoraEvento;
 
 import java.time.LocalDateTime;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 /**
  * Servicio para la atención en consultorio y sala de espera (BPMN-3, RF-13).
  */
+@Service
 public class AtencionService {
 
-    private final ReservaCitaDAO reservaCitaDAO = new ReservaCitaDAO();
-    private final BitacoraEventoDAO bitacoraDAO = new BitacoraEventoDAO();
+    private final ReservaCitaDAO reservaCitaDAO;
+    private final BitacoraEventoDAO bitacoraDAO;
+
+    public AtencionService() {
+        this(new ReservaCitaDAO(), new BitacoraEventoDAO());
+    }
+
+    @Autowired
+    public AtencionService(ReservaCitaDAO reservaCitaDAO, BitacoraEventoDAO bitacoraDAO) {
+        this.reservaCitaDAO = reservaCitaDAO;
+        this.bitacoraDAO = bitacoraDAO;
+    }
 
     /**
      * El médico presiona el botón de llamada para actualizar la pantalla de sala de espera.

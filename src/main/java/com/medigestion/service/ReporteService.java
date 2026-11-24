@@ -21,12 +21,16 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 /**
  * Servicio para generación y exportación de reportes institucionales en formato
  * Excel (.xlsx)
  * utilizando Apache POI (REP-01, R01, R02, R03).
  * Cumple con la rúbrica de recursos Java y principios SOLID (SRP, DIP).
  */
+@Service
 public class ReporteService {
 
     private static final Logger log = LoggerFactory.getLogger(ReporteService.class);
@@ -39,6 +43,7 @@ public class ReporteService {
         this(new ReservaCitaDAO(), new DemandaNoAtendidaDAO());
     }
 
+    @Autowired
     public ReporteService(IReservaCitaDAO reservaCitaDAO, IDemandaNoAtendidaDAO demandaDAO) {
         this.reservaCitaDAO = Preconditions.checkNotNull(reservaCitaDAO, "reservaCitaDAO no puede ser nulo");
         this.demandaDAO = Preconditions.checkNotNull(demandaDAO, "demandaDAO no puede ser nulo");

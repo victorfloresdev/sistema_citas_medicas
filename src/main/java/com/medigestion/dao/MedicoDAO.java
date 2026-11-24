@@ -3,8 +3,10 @@ package com.medigestion.dao;
 import com.medigestion.model.Medico;
 import com.medigestion.util.HibernateUtil;
 import jakarta.persistence.EntityManager;
+import org.springframework.stereotype.Repository;
 import java.util.List;
 
+@Repository
 public class MedicoDAO extends GenericDAO<Medico, Integer> {
 
     public MedicoDAO() {

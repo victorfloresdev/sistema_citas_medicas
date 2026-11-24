@@ -13,12 +13,16 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.Optional;
 
 /**
  * Servicio para gestión de pacientes y validación de identidad (RF-01, RNF-04).
  * Aplica principios SOLID (SRP, DIP) e incorpora Google Guava, Apache Commons y Logback.
  */
+@Service
 public class PacienteService {
 
     private static final Logger log = LoggerFactory.getLogger(PacienteService.class);
@@ -30,6 +34,7 @@ public class PacienteService {
         this(new PacienteDAO(), new BitacoraEventoDAO());
     }
 
+    @Autowired
     public PacienteService(IPacienteDAO pacienteDAO, IBitacoraEventoDAO bitacoraDAO) {
         this.pacienteDAO = Preconditions.checkNotNull(pacienteDAO, "pacienteDAO no puede ser nulo");
         this.bitacoraDAO = Preconditions.checkNotNull(bitacoraDAO, "bitacoraDAO no puede ser nulo");

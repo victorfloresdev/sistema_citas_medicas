@@ -1,10 +1,14 @@
 @echo off
 chcp 65001 > nul
-title MediGestion - Sistema de Citas Medicas
+title MediGestión - Sistema de Citas Médicas (Spring Boot 3 + Thymeleaf)
 cls
 echo ==================================================================
-echo           MEDIGESTION - SISTEMA DE CITAS MEDICAS
+echo           MEDIGESTIÓN 80% - SISTEMA DE CITAS MÉDICAS
+echo        Spring Boot 3 + Thymeleaf + AWS Ready (Java 21 LTS)
 echo ==================================================================
 echo.
-java -jar "%~dp0target\medigestion-app.jar"
+echo  Iniciando servidor web embebido en http://localhost:8080/ ...
+echo.
+start "" http://localhost:8080/
+java -jar "%~dp0target\medigestion-citas-1.0-SNAPSHOT.jar"
 pause

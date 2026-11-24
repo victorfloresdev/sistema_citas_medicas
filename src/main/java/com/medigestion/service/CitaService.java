@@ -18,11 +18,15 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 /**
  * Servicio central para la gestión y reserva de citas médicas.
  * Aplica principios SOLID (SRP, DIP, LSP, ISP, OCP) y recursos Java (Google Guava, Apache Commons, Logback).
  * Implementa RF-02, RF-03, RF-04, RF-05, RF-07, RF-08, RF-10 en trazabilidad con BPM-1 y BPM-2.
  */
+@Service
 public class CitaService {
 
     private static final Logger log = LoggerFactory.getLogger(CitaService.class);
@@ -45,6 +49,7 @@ public class CitaService {
     /**
      * Constructor con inyección de dependencias para Principio de Inversión de Dependencias (DIP) y TDD.
      */
+    @Autowired
     public CitaService(IOfertaMedicaDAO ofertaMedicaDAO,
                        IReservaCitaDAO reservaCitaDAO,
                        IEspecialidadDAO especialidadDAO,

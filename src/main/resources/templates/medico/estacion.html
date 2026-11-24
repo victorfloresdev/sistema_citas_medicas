@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: header-head('Estación Médica')}"></head>
+<body>
+
+<header th:replace="~{fragments/layout :: header-nav}"></header>
+
+<main class="container my-4">
+    <div class="card card-custom p-4 mb-4 border-0 text-white" style="background: linear-gradient(135deg, #0b3954 0%, #1d6a96 100%);">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <span class="badge bg-info text-dark mb-1">Módulo Estación de Consultorio (BPM-3)</span>
+                <h3 class="fw-bold mb-1" th:text="${medico.nombreCompleto}">Dra. Sarah Jenkins</h3>
+                <div class="small opacity-75">
+                    <span class="me-3"><i class="bi bi-door-open me-1"></i> Consultorio: <strong th:text="${medico.consultorio}">C-101</strong></span>
+                    <span><i class="bi bi-envelope me-1"></i> <span th:text="${medico.email}">sarah.jenkins@medigestion.com</span></span>
+                </div>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <a th:href="@{/sala-espera}" target="_blank" class="btn btn-light btn-sm fw-semibold shadow-sm">
+                    <i class="bi bi-tv me-1"></i> Abrir Monitor de Sala TV
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/layout :: alerts}"></div>
+
+    <!-- Cola de Pacientes del Día -->
+    <div class="card card-custom p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+            <h5 class="fw-bold mb-0 text-dark">
+                <i class="bi bi-people-fill text-primary me-2"></i> Cola de Pacientes Citados Hoy
+            </h5>
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle" th:text="${citas.size()} + ' citas agendadas'">2 citas</span>
+        </div>
+
+        <div th:if="${#lists.isEmpty(citas)}" class="text-center py-5">
+            <div class="text-muted mb-2 fs-1"><i class="bi bi-inbox"></i></div>
+            <h5 class="fw-bold text-dark">No registra citas pendientes para hoy</h5>
+            <p class="text-muted small">Los pacientes que reserven cupos en su consultorio aparecerán en esta lista.</p>
+        </div>
+
+        <div th:if="${!#lists.isEmpty(citas)}" class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-secondary small text-uppercase">
+                    <tr>
+                        <th>Ticket</th>
+                        <th>Paciente Asegurado</th>
+                        <th>DNI</th>
+                        <th>Hora Cita</th>
+                        <th>Estado Actual</th>
+                        <th>Último Llamado</th>
+                        <th class="text-end">Acciones Clínicas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="c : ${citas}">
+                        <td>
+                            <span class="badge bg-primary font-monospace fs-6" th:text="${c.codigoTicket}">MG-XXXX-YY</span>
+                        </td>
+                        <td>
+                            <strong th:text="${c.paciente.nombreCompleto}">Carlos Mendoza</strong>
+                        </td>
+                        <td>
+                            <span class="text-muted" th:text="${c.paciente.dni}">45892134</span>
+                        </td>
+                        <td>
+                            <i class="bi bi-clock me-1 text-muted"></i>
+                            <span th:text="${#temporals.format(c.ofertaMedica.horario.fechaHoraInicio, 'HH:mm')}">10:00</span>
+                        </td>
+                        <td>
+                            <span th:if="${c.estado == 'Confirmada' && c.fechaLlamado == null}" class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2 py-1">En Espera</span>
+                            <span th:if="${c.estado == 'Confirmada' && c.fechaLlamado != null}" class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-2 py-1">Llamado al Consultorio</span>
+                            <span th:if="${c.estado == 'Completada'}" class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">Atendido</span>
+                            <span th:if="${c.estado == 'Cancelada'}" class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1">Cancelado</span>
+                        </td>
+                        <td>
+                            <span th:if="${c.fechaLlamado != null}" class="small text-muted" th:text="${#temporals.format(c.fechaLlamado, 'HH:mm:ss')}">10:05:12</span>
+                            <span th:if="${c.fechaLlamado == null}" class="text-muted small">--:--</span>
+                        </td>
+                        <td class="text-end">
+                            <div class="d-flex justify-content-end gap-2" th:if="${c.estado == 'Confirmada'}">
+                                <!-- Botón Llamar -->
+                                <form th:action="@{/medico/llamar}" method="post" class="m-0">
+                                    <input type="hidden" name="idReserva" th:value="${c.idReserva}" />
+                                    <button type="submit" class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-megaphone me-1"></i> Llamar
+                                    </button>
+                                </form>
+
+                                <!-- Botón Atender -->
+                                <form th:action="@{/medico/atender}" method="post" class="m-0">
+                                    <input type="hidden" name="idReserva" th:value="${c.idReserva}" />
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        <i class="bi bi-check2-circle me-1"></i> Finalizar
+                                    </button>
+                                </form>
+                            </div>
+                            <span th:if="${c.estado != 'Confirmada'}" class="text-muted small">Sin acciones</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+</html>

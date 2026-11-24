@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: header-head('Confirmación de Cupo')}"></head>
+<body>
+
+<header th:replace="~{fragments/layout :: header-nav}"></header>
+
+<main class="container py-5 my-auto">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            <div class="card card-custom p-4 p-md-5">
+                <div class="text-center mb-4 pb-2 border-bottom">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex p-3 mb-2 shadow-sm">
+                        <i class="bi bi-shield-check fs-2"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark">Confirmación de Reserva Médica</h4>
+                    <p class="text-muted small">Verifique el resumen de su turno antes de emitir la constancia</p>
+                </div>
+
+                <div th:replace="~{fragments/layout :: alerts}"></div>
+
+                <!-- Detalle de la Cita -->
+                <div class="bg-light rounded p-3 mb-4 border">
+                    <div class="row g-2 small">
+                        <div class="col-6 text-muted">Asegurado:</div>
+                        <div class="col-6 fw-bold text-end" th:text="${paciente.nombreCompleto}">Carlos Mendoza</div>
+
+                        <div class="col-6 text-muted">DNI:</div>
+                        <div class="col-6 fw-bold text-end" th:text="${paciente.dni}">45892134</div>
+
+                        <div class="col-6 text-muted">Especialidad:</div>
+                        <div class="col-6 fw-bold text-end text-primary" th:text="${oferta.especialidad.nombreEspecialidad}">Cardiología</div>
+
+                        <div class="col-6 text-muted">Médico:</div>
+                        <div class="col-6 fw-bold text-end" th:text="${oferta.medico.nombreCompleto}">Dra. Sarah Jenkins</div>
+
+                        <div class="col-6 text-muted">Consultorio:</div>
+                        <div class="col-6 fw-bold text-end" th:text="${oferta.consultorio}">C-101</div>
+
+                        <div class="col-6 text-muted">Fecha y Hora:</div>
+                        <div class="col-6 fw-bold text-end" th:text="${#temporals.format(oferta.horario.fechaHoraInicio, 'dd/MM/yyyy HH:mm')}">15/11/2026 10:00</div>
+                    </div>
+                </div>
+
+                <!-- Alerta de Regla de Negocio RF-04 -->
+                <div class="alert alert-warning d-flex align-items-start small p-3 mb-4">
+                    <i class="bi bi-info-circle-fill me-2 fs-5 text-warning flex-shrink-0"></i>
+                    <div>
+                        <strong>Regla de Equidad (RF-04):</strong> El sistema verificará automáticamente que usted no cuente con otra cita activa en la misma especialidad durante esta semana calendario (lunes a domingo).
+                    </div>
+                </div>
+
+                <!-- Formulario de Emisión -->
+                <form th:action="@{/paciente/reservar}" method="post">
+                    <input type="hidden" name="idOferta" th:value="${oferta.idOferta}" />
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a th:href="@{/paciente/cartelera}" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle me-1"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary px-4 fw-semibold shadow-sm">
+                            <i class="bi bi-ticket-perforated me-1"></i> Confirmar y Emitir Ticket
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+</html>
